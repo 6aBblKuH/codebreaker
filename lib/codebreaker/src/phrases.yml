@@ -1,0 +1,16 @@
+:welcome:
+  "Welcome to CO-CO-CO-Coooodebreaker.
+  Type 'game' for starting new game.
+  Type 'stats' for showing statistics"
+:difficulty:
+  :easy: '30 attempts, 3 hints'
+  :medium: '15 attempts, 2 hints'
+  :hard: '10 attempts, 1 hints'
+:rules:
+  "You have to guess 4-digit number where each digit placed between 1 and 6.
+  The code-maker then marks the guess with up to four + and - signs.
+  A + indicates an exact match: one of the numbers in the guess is the same.
+  A - indicates a number match: one of the numbers in the guess is the same
+  as one of the numbers in the secret code but in a different position."
+:win: 'Congrat. U did it'
+:loose: 'What do we say God of Games? Not today. Secret code was - '
