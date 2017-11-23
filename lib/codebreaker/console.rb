@@ -1,10 +1,13 @@
-require "yaml"
+# frozen_string_literal: true
+
+
 
 class Console
-  PhrasesPath = 'lib/codebreaker/src/phrases.yml'
+  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'
 
+  attr_reader :phrases
   def initialize
-    @phrases = YAML.load_file(PhrasesPath)
+    @phrases = YAML.load_file(PHRASES_PATH)
   end
 
   def message(val)
@@ -21,9 +24,21 @@ class Console
   end
 
   def difficulty_rules
-    @phrases[:difficulty].each do|diff, descr|
+    @phrases[:difficulty].each do |diff, descr|
       message("#{diff}: #{descr}")
     end
+  end
+
+  def welcome
+    message @phrases[:welcome]
+  end
+
+  def round_question(attempts)
+    question("#{@phrases[:round_question]}#{attempts.to_s}")
+  end
+
+  def invalid_number
+    message @phrases[:invalid_number]
   end
 
   def win

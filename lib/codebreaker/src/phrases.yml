@@ -1,6 +1,6 @@
-:welcome:
-  "Welcome to CO-CO-CO-Coooodebreaker.
-  Type 'game' for starting new game.
+:welcome: "Welcome to CO-CO-CO-Coooodebreaker."
+:welcome_instruction:
+  "Type 'game' for starting new game.
   Type 'stats' for showing statistics"
 :difficulty:
   :easy: '30 attempts, 3 hints'
@@ -14,3 +14,6 @@
   as one of the numbers in the secret code but in a different position."
 :win: 'Congrat. U did it'
 :loose: 'What do we say God of Games? Not today. Secret code was - '
+:no_hint: 'Hints are over'
+:round_question: "Put the number. Attempts remain - "
+:invalid_number: 'Put 4-digital number'
