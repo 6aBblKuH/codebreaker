@@ -3,7 +3,7 @@
 
 
 class Console
-  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'
+  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'.freeze
 
   attr_reader :phrases
   def initialize
