@@ -11,7 +11,7 @@ class Game
     @secret_code = []
     @console = Console.new
     # welcome
-    # new_game
+    new_game
   end
 
   def welcome
@@ -28,10 +28,10 @@ class Game
 
   def choose_the_difficulty
     answer = @console.question 'choose the difficulty lvl'
-    difficulty(answer)
+    handle_difficulty(answer)
   end
 
-  def difficulty(diff)
+  def handle_difficulty(diff)
     lvl = DIFFICULTY[diff.to_sym]
     if lvl
       setup_the_difficulty(lvl)
@@ -62,11 +62,9 @@ class Game
   end
 
   def handle_code
-    @user_code = []
-    @user_answer.each_char { |chr| @user_code << chr.to_i }
+    @user_code = @user_answer.split('')
     if compare_codes
-      @console.win
-      @attempts_count = 0
+      win
     else
       handle_guess
       @attempts_count -= 1
@@ -76,31 +74,24 @@ class Game
 
   def handle_guess
     @round_result = ''
-    uncatched_numbers = check_numbers_for_correct_position
+    uncatched_numbers = check_numbers_for_correct_position.compact
     check_numbers_with_incorrect_position(uncatched_numbers)
     @console.message(@round_result) unless @round_result.empty?
   end
 
   def check_numbers_for_correct_position
-    uncatched_numbers = []
-    @secret_code.each_index do |index|
-      if @secret_code[index] == @user_code[index]
+    @secret_code.map.with_index do |element, index|
+      if element == @user_code[index]
         @round_result += '+'
         @user_code[index] = nil
       else
-        uncatched_numbers << @secret_code[index]
+        element
       end
     end
-    uncatched_numbers
   end
 
   def check_numbers_with_incorrect_position(uncatched_numbers)
-    @user_code.compact.each do |number|
-      if uncatched_numbers.include?(number)
-        uncatched_numbers.delete_at(uncatched_numbers.index(number))
-        @round_result += '-'
-      end
-    end
+    (@user_code.compact & uncatched_numbers).size.times { @round_result += '-' }
   end
 
   def validate_answer
@@ -132,14 +123,16 @@ class Game
     @console.message(msg)
   end
 
-  def secret_code
-    @secret_code ||= make_secret_code
-  end
-
   private
+
   def make_secret_code
-    4.times { @secret_code << rand(1..6) }
+    4.times { @secret_code << rand(1..6).to_s }
     @hints = @secret_code.shuffle
     @secret_code
+  end
+
+  def win
+    @console.win
+    @attempts_count = 0
   end
 end

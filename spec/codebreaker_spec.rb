@@ -2,7 +2,7 @@
 
 RSpec.describe Game do
   context '#make_secret_code' do
-    before() do
+    before do
       @secret_code = subject.send(:make_secret_code)
     end
 
@@ -10,57 +10,57 @@ RSpec.describe Game do
       expect(@secret_code).to be_kind_of(Array)
     end
 
-    it "has 4 digit" do
+    it 'has 4 digit' do
       expect(@secret_code.size).to eq(4)
     end
 
-    it "has only digits between 1 and 6" do
+    it 'has only digits between 1 and 6' do
       expect(@secret_code.join =~ /^[1-6]{4}$/).to be_truthy
     end
   end
 
   context '#compare_codes' do
-    before() do
+    before do
       subject.instance_variable_set(:@secret_code, [1, 2, 3, 4])
     end
 
-    it "has to return false" do
+    it 'has to return false' do
       expect(subject.compare_codes).to be false
     end
 
-    it "has to return true" do
+    it 'has to return true' do
       subject.instance_variable_set(:@user_code, [1, 2, 3, 4])
       expect(subject.compare_codes).to be true
     end
   end
 
   context '#take_a_hint!' do
-    before() do
+    before do
       subject.instance_variable_set(:@hints, [1, 2, 3, 4])
       subject.instance_variable_set(:@hints_count, 2)
     end
 
-    it "return last number from hints array" do
+    it 'return last number from hints array' do
       expected_hint = subject.instance_variable_get(:@hints).last
       expect(subject.send(:take_a_hint!)).to eq(expected_hint)
     end
 
-    it "take one number as hint and remove it from array" do
-      expect { subject.send(:take_a_hint!) }.to change{ subject.instance_variable_get(:@hints).size }.by(-1)
+    it 'take one number as hint and remove it from array' do
+      expect { subject.send(:take_a_hint!) }.to change { subject.instance_variable_get(:@hints).size }.by(-1)
     end
 
-    it "decrement hints count by one" do
-      expect { subject.send(:take_a_hint!) }.to change{ subject.instance_variable_get(:@hints_count) }.by(-1)
+    it 'decrement hints count by one' do
+      expect { subject.send(:take_a_hint!) }.to change { subject.instance_variable_get(:@hints_count) }.by(-1)
     end
   end
 
   context '#hint' do
-    it "tells about missing hints" do
+    it 'tells about missing hints' do
       subject.instance_variable_set(:@hints_count, 0)
       expect { subject.send(:hint) }.to output("Hints are over\n").to_stdout
     end
 
-    it "does one hint" do
+    it 'does one hint' do
       subject.instance_variable_set(:@hints, [1, 2, 3, 4])
       subject.instance_variable_set(:@hints_count, 2)
       expect { subject.send(:hint) }.to output("4\n").to_stdout
@@ -68,20 +68,20 @@ RSpec.describe Game do
   end
 
   context '#handle_answer' do
-    it "calls a hint" do
+    it 'calls a hint' do
       subject.instance_variable_set(:@user_answer, 'hint')
       allow(subject).to receive(:hint)
       expect(subject).to receive(:hint)
       subject.send(:handle_answer)
     end
 
-    it "calls validate method" do
+    it 'calls validate method' do
       subject.instance_variable_set(:@user_answer, 'test')
       expect(subject).to receive(:validate_answer)
       subject.send(:handle_answer)
     end
 
-    it "handles correct number" do
+    it 'handles correct number' do
       subject.instance_variable_set(:@user_answer, '1234')
       expect(subject).to receive(:handle_code)
       subject.send(:handle_answer)
@@ -89,30 +89,30 @@ RSpec.describe Game do
   end
 
   context '#validate_answer' do
-    it "tells about input error" do
+    it 'tells about input error' do
       expect { subject.send(:validate_answer) }.to output("Put 4-digital number\n").to_stdout
     end
 
-    it "returns true" do
+    it 'returns true' do
       subject.instance_variable_set(:@user_answer, '1234')
       expect(subject.send(:validate_answer)).to be true
     end
   end
 
   context '#setup_the_difficulty' do
-    it "setup easy level of difficulty" do
+    it 'setup easy level of difficulty' do
       subject.send(:setup_the_difficulty, Game::DIFFICULTY[:easy])
       expect(subject.instance_variable_get(:@attempts_count)).to eq(30)
       expect(subject.instance_variable_get(:@hints_count)).to eq(3)
     end
 
-    it "setup medium level of difficulty" do
+    it 'setup medium level of difficulty' do
       subject.send(:setup_the_difficulty, Game::DIFFICULTY[:medium])
       expect(subject.instance_variable_get(:@attempts_count)).to eq(15)
       expect(subject.instance_variable_get(:@hints_count)).to eq(2)
     end
 
-    it "setup hard level of difficulty" do
+    it 'setup hard level of difficulty' do
       subject.send(:setup_the_difficulty, Game::DIFFICULTY[:hard])
       expect(subject.instance_variable_get(:@attempts_count)).to eq(10)
       expect(subject.instance_variable_get(:@hints_count)).to eq(1)
@@ -126,9 +126,7 @@ RSpec.describe Game do
   #     expect { subject.difficulty('test') }.to output("Spelling failurer\n").to_stdout
   #   end
   # end
-
 end
 
 RSpec.describe Console do
-
 end
