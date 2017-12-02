@@ -1,51 +1,52 @@
 # frozen_string_literal: true
-
+require_relative 'data'
 
 
 class Console
-  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'.freeze
+  include DataHadling
 
   attr_reader :phrases
+
   def initialize
-    @phrases = YAML.load_file(PHRASES_PATH)
+    @phrases = YAML.load_file(DataHadling::PHRASES_PATH)
   end
 
-  def message(val)
-    puts val
+  def output(message)
+    puts message.is_a?(Symbol) ? @phrases[message] : message
   end
 
-  def question(q)
-    puts q
+  def ask(question)
+    output(question) if question
     gets.chomp
   end
 
+  def dichotomy_question?(question)
+    answer = ask(question).downcase
+    %w[yes y yeap].include?(answer)
+  end
+
   def rules
-    message(@phrases[:rules])
+    output(:rules)
+    difficulty_rules
   end
 
-  def difficulty_rules
-    @phrases[:difficulty].each do |diff, descr|
-      message("#{diff}: #{descr}")
-    end
-  end
-
-  def welcome
-    message @phrases[:welcome]
+  def output_statistics
+    handle_statistics_for_output.each { |record| output(record) }
   end
 
   def round_question(attempts)
-    question("#{@phrases[:round_question]}#{attempts.to_s}")
-  end
-
-  def invalid_number
-    message @phrases[:invalid_number]
-  end
-
-  def win
-    message @phrases[:win]
+    ask("#{@phrases[:round_question]}#{attempts.to_s}")
   end
 
   def loose(secret_code)
-    message @phrases[:loose] << secret_code.join
+    output(@phrases[:loose] << secret_code.join)
+  end
+
+  private
+
+  def difficulty_rules
+    Game::DIFFICULTIES.each do |diff_name, params|
+      output("#{diff_name}: #{params[:attempts]} attempts and #{params[:hints]} hints")
+    end
   end
 end

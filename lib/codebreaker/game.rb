@@ -1,138 +1,130 @@
 # frozen_string_literal: true
 
 class Game
-  DIFFICULTY = {
+
+  DIFFICULTIES = {
     easy: { attempts: 30, hints: 3 },
     medium: { attempts: 15, hints: 2 },
     hard: { attempts: 10, hints: 1 }
   }.freeze
 
   def initialize
-    @secret_code = []
-    @console = Console.new
-    # welcome
-    new_game
-  end
-
-  def welcome
-    @console
-  end
-
-  def new_game
-    @console.rules
-    @console.difficulty_rules
-    choose_the_difficulty
-    make_secret_code
-    game_round
-  end
-
-  def choose_the_difficulty
-    answer = @console.question 'choose the difficulty lvl'
-    handle_difficulty(answer)
-  end
-
-  def handle_difficulty(diff)
-    lvl = DIFFICULTY[diff.to_sym]
-    if lvl
-      setup_the_difficulty(lvl)
-    else
-      @console.message('Spelling failure')
-      choose_the_difficulty
-    end
-  end
-
-  def setup_the_difficulty(lvl)
-    @attempts_count = lvl[:attempts]
-    @hints_count = lvl[:hints]
-  end
-
-  def game_round
-    while @attempts_count > 0
-      @user_answer = @console.round_question(@attempts_count)
-      handle_answer
-    end
-  end
-
-  def handle_answer
-    if @user_answer == 'hint'
-      hint
-    elsif validate_answer
-      handle_code
-    end
-  end
-
-  def handle_code
-    @user_code = @user_answer.split('')
-    if compare_codes
-      win
-    else
-      handle_guess
-      @attempts_count -= 1
-      @console.loose(@secret_code) if @attempts_count.zero?
-    end
-  end
-
-  def handle_guess
-    @round_result = ''
-    uncatched_numbers = check_numbers_for_correct_position.compact
-    check_numbers_with_incorrect_position(uncatched_numbers)
-    @console.message(@round_result) unless @round_result.empty?
-  end
-
-  def check_numbers_for_correct_position
-    @secret_code.map.with_index do |element, index|
-      if element == @user_code[index]
-        @round_result += '+'
-        @user_code[index] = nil
-      else
-        element
-      end
-    end
-  end
-
-  def check_numbers_with_incorrect_position(uncatched_numbers)
-    (@user_code.compact & uncatched_numbers).size.times { @round_result += '-' }
-  end
-
-  def validate_answer
-    return true if @user_answer =~ /^[1-6]{4}$/
-    @console.invalid_number
-  end
-
-  def hint
-    msg = @hints_count.zero? ? @console.phrases[:no_hint] : take_a_hint!
-    @console.message(msg)
-  end
-
-  def take_a_hint!
-    @hints_count -= 1
-    @hints.pop
-  end
-
-  def compare_codes
-    @secret_code == @user_code
-  end
-
-  def one_more?
-    answer = @console.question 'one more? (y/n)'
-    msg = if %w[y yes].include? answer.downcase
-            'nu go'
-          else
-            'ty for game'
-    end
-    @console.message(msg)
+    console.output(:welcome)
+    welcome_instructions
   end
 
   private
 
-  def make_secret_code
-    4.times { @secret_code << rand(1..6).to_s }
-    @hints = @secret_code.shuffle
-    @secret_code
+  def welcome_instructions
+    case console.ask(:welcome_instruction).downcase
+    when 'game' then new_game
+    when 'stats' then statistics
+    when 'exit' then exit
+    else
+      console.output(:spelling_error)
+      welcome_instructions
+    end
+  end
+
+  def new_game
+    console.rules
+    handle_difficulty
+    game_round
+  end
+
+  def statistics
+    console.output_statistics
+    welcome_instructions
+  end
+
+  def handle_difficulty
+    @difficulty_name = console.ask(:choose_difficulty).to_sym
+    return if DIFFICULTIES.key? @difficulty_name
+    console.output(:spelling_error)
+    handle_difficulty
+  end
+
+  def game_round
+    while attempts.positive?
+      @user_answer = console.round_question(attempts)
+      next hint if @user_answer == 'hint'
+      return win if equal_codes?
+      valid_answer? ? handle_guess : console.output(:invalid_number)
+    end
+    lose
+  end
+
+  def handle_guess
+    @user_code = @user_answer.each_char.map(&:to_i)
+    handle_numbers
+    console.output(@round_result) unless @round_result.empty?
+    @attempts -= 1
+  end
+
+  def check_numbers_for_correct_position
+    secret_code.map.with_index do |element, index|
+      next element unless element == @user_code[index]
+      @user_code[index] = nil
+    end
+  end
+
+  def handle_numbers
+    uncatched_numbers = check_numbers_for_correct_position
+    @round_result = '+' * uncatched_numbers.select(&:nil?).size
+    @user_code.compact.map do |number|
+      next unless uncatched_numbers.compact.include?(number)
+      @round_result += '-'
+      uncatched_numbers[uncatched_numbers.index(number)] = nil
+    end
+  end
+
+  def valid_answer?
+    @user_answer =~ /^[1-6]{4}$/
+  end
+
+  def hint
+    msg = hints.empty? ? :no_hint : take_a_hint!
+    console.output(msg)
+  end
+
+  def take_a_hint!
+    @hints.pop
+  end
+
+  def equal_codes?
+    secret_code.join == @user_answer
+  end
+
+  def attempts
+    @attempts ||= DIFFICULTIES.dig(@difficulty_name, :attempts)
+  end
+
+  def hints
+    @hints ||= secret_code.shuffle.take(DIFFICULTIES.dig(@difficulty_name, :hints))
+  end
+
+  def console
+    @console ||= Console.new
+  end
+
+  def secret_code
+    @secret_code ||= Array.new(4) { rand(1..6) }
   end
 
   def win
-    @console.win
-    @attempts_count = 0
+    console.output(:win)
+    save_score if console.dichotomy_question?(:save_score)
+    console.dichotomy_question?(:new_game) ? Game.new : console.output(:goodbye)
+  end
+
+  def save_score
+    name = console.ask(:username)
+    score_data = { name: name, difficulty: @difficulty_name, attempts: attempts, hints: hints.size }
+    console.save_score(score_data)
+  end
+
+  def lose
+    console.loose(secret_code)
+    console.dichotomy_question?(:new_game) ? Game.new : console.output(:goodbye)
   end
 end

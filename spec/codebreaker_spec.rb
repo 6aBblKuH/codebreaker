@@ -101,31 +101,52 @@ RSpec.describe Game do
 
   context '#setup_the_difficulty' do
     it 'setup easy level of difficulty' do
-      subject.send(:setup_the_difficulty, Game::DIFFICULTY[:easy])
-      expect(subject.instance_variable_get(:@attempts_count)).to eq(30)
-      expect(subject.instance_variable_get(:@hints_count)).to eq(3)
+      subject.instance_variable_set(:@difficulty, Game::DIFFICULTY[:easy])
+      subject.send(:setup_the_difficulty)
+      expect(subject.instance_variable_get(:@attempts_count)).to eq(Game::DIFFICULTY.dig(:easy, :attempts))
+      expect(subject.instance_variable_get(:@hints_count)).to eq(Game::DIFFICULTY.dig(:easy, :hints))
     end
 
     it 'setup medium level of difficulty' do
-      subject.send(:setup_the_difficulty, Game::DIFFICULTY[:medium])
+      subject.instance_variable_set(:@difficulty, Game::DIFFICULTY[:medium])
+      subject.send(:setup_the_difficulty)
       expect(subject.instance_variable_get(:@attempts_count)).to eq(15)
       expect(subject.instance_variable_get(:@hints_count)).to eq(2)
     end
 
     it 'setup hard level of difficulty' do
-      subject.send(:setup_the_difficulty, Game::DIFFICULTY[:hard])
+      subject.instance_variable_set(:@difficulty, Game::DIFFICULTY[:hard])
+      subject.send(:setup_the_difficulty)
       expect(subject.instance_variable_get(:@attempts_count)).to eq(10)
       expect(subject.instance_variable_get(:@hints_count)).to eq(1)
     end
   end
 
-  # context '#difficulty' do
-  #   it "tells about spelling error and calls itself again" do
-  #
-  #     expect(Game).to receive(:choose_the_difficulty)
-  #     expect { subject.difficulty('test') }.to output("Spelling failurer\n").to_stdout
-  #   end
-  # end
+  context '#difficulty' do
+    it "tells about spelling error and calls itself again" do
+      allow(subject).to receive(:choose_the_difficulty)
+      expect(subject).to receive(:choose_the_difficulty)
+      subject.send(:handle_difficulty, 'test')
+    end
+
+    it "calls setuping method with easy lvl" do
+      allow(subject).to receive(:setup_the_difficulty)
+      expect(subject).to receive(:setup_the_difficulty)
+      subject.send(:handle_difficulty, 'easy')
+    end
+
+    it "calls setuping method with medium lvl" do
+      allow(subject).to receive(:setup_the_difficulty)
+      expect(subject).to receive(:setup_the_difficulty)
+      subject.send(:handle_difficulty, 'medium')
+    end
+
+    it "calls setuping method with hard lvl" do
+      allow(subject).to receive(:setup_the_difficulty)
+      expect(subject).to receive(:setup_the_difficulty)
+      subject.send(:handle_difficulty, 'hard')
+    end
+  end
 end
 
 RSpec.describe Console do

@@ -1,19 +1,23 @@
+:choose_difficulty: 'Choose the difficulty lvl'
+:codebreaker_logo:
+  "_____    ______  ______   ______   _____  ____\n
+  |  ___|  |  __  | |  _  \  |  ___| |  _  \ |\n
+  |  |     | |  | | | |  \ | |  |    | |_| | |\n
+  |  |     | |  | | | |  | | |  |__  |_____| |\n
+  |  |     | |  | | | |  | | |   __| |  _  \ |   _\n
+  |  |__   | |__| | | |_/  | |  |__  | |_| | |  | \\\n
+  |_____|  |______| |_____/  |_____| |_____| |__|  \_|\n
+  "
 :welcome: "Welcome to CO-CO-CO-Coooodebreaker."
-:welcome_instruction:
-  "Type 'game' for starting new game.
-  Type 'stats' for showing statistics"
-:difficulty:
-  :easy: '30 attempts, 3 hints'
-  :medium: '15 attempts, 2 hints'
-  :hard: '10 attempts, 1 hints'
-:rules:
-  "You have to guess 4-digit number where each digit placed between 1 and 6.
-  The code-maker then marks the guess with up to four + and - signs.
-  A + indicates an exact match: one of the numbers in the guess is the same.
-  A - indicates a number match: one of the numbers in the guess is the same
-  as one of the numbers in the secret code but in a different position."
+:welcome_instruction: "Type 'game' for starting new game.\nType 'stats' for showing statistics\nType 'exit' for exit"
+:rules: "You have to guess 4-digit number where each digit placed between 1 and 6.\nThe code-maker then marks the guess with up to four + and - signs.\nA + indicates an exact match: one of the numbers in the guess is the same.\nA - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position."
 :win: 'Congrat. U did it'
 :loose: 'What do we say God of Games? Not today. Secret code was - '
 :no_hint: 'Hints are over'
 :round_question: "Put the number. Attempts remain - "
 :invalid_number: 'Put 4-digital number'
+:spelling_error: 'Spelling error'
+:new_game: 'Play one more? (y/n)'
+:save_score: 'Save your score? (y/n)'
+:username: 'What is your name?'
+:goodbye: 'Thank you for game'
