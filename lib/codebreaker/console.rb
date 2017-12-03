@@ -1,14 +1,16 @@
 # frozen_string_literal: true
-require_relative 'data'
+require_relative 'statistic'
 
 
 class Console
-  include DataHadling
+  include Statistic
+
+  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'.freeze
 
   attr_reader :phrases
 
   def initialize
-    @phrases = YAML.load_file(DataHadling::PHRASES_PATH)
+    @phrases = YAML.load_file(PHRASES_PATH)
   end
 
   def output(message)

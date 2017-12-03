@@ -1,5 +1,5 @@
-module DataHadling
-  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'.freeze
+module Statistic
+
   STATISTICS_PATH = 'lib/codebreaker/src/statistics.yml'.freeze
 
   def statistics
