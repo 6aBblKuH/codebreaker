@@ -8,8 +8,8 @@ class Game
   }.freeze
 
   def initialize
-    console.output(:welcome)
-    welcome_instructions
+    # console.output(:welcome)
+    # welcome_instructions
   end
 
   private
