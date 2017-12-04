@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Console
-
   def output(message)
     puts message.is_a?(Symbol) ? phrases[message] : message
   end
@@ -26,7 +25,7 @@ class Console
   end
 
   def round_question(attempts)
-    ask("#{phrases[:round_question]}#{attempts.to_s}")
+    ask("#{phrases[:round_question]}#{attempts}")
   end
 
   def loose(secret_code)

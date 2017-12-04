@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class Game
 
+class Game
   DIFFICULTIES = {
     easy: { attempts: 30, hints: 3 },
     medium: { attempts: 15, hints: 2 },

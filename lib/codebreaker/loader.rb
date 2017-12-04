@@ -1,6 +1,7 @@
-class Loader
+# frozen_string_literal: true
 
-  PATH = 'lib/codebreaker/src/'.freeze
+class Loader
+  PATH = 'lib/codebreaker/src/'
 
   class << self
     def load_file(filename)
