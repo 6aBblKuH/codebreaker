@@ -1,20 +1,9 @@
 # frozen_string_literal: true
-require_relative 'statistic'
-
 
 class Console
-  include Statistic
-
-  PHRASES_PATH = 'lib/codebreaker/src/phrases.yml'.freeze
-
-  attr_reader :phrases
-
-  def initialize
-    @phrases = YAML.load_file(PHRASES_PATH)
-  end
 
   def output(message)
-    puts message.is_a?(Symbol) ? @phrases[message] : message
+    puts message.is_a?(Symbol) ? phrases[message] : message
   end
 
   def ask(question)
@@ -37,11 +26,11 @@ class Console
   end
 
   def round_question(attempts)
-    ask("#{@phrases[:round_question]}#{attempts.to_s}")
+    ask("#{phrases[:round_question]}#{attempts.to_s}")
   end
 
   def loose(secret_code)
-    output(@phrases[:loose] << secret_code.join)
+    output(phrases[:loose] << secret_code.join)
   end
 
   private
@@ -49,6 +38,20 @@ class Console
   def difficulty_rules
     Game::DIFFICULTIES.each do |diff_name, params|
       output("#{diff_name}: #{params[:attempts]} attempts and #{params[:hints]} hints")
+    end
+  end
+
+  def phrases
+    @phrases ||= Loader.load_file('phrases')
+  end
+
+  def statistics
+    @statistics ||= Loader.load_file('statistics')
+  end
+
+  def handle_statistics_for_output
+    statistics.map do |record|
+      "#{record[:name]} won the game on #{record[:difficulty]} level and still had #{record[:attempts]} attempts and #{record[:hints]} hints"
     end
   end
 end

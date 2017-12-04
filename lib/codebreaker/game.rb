@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Game
 
   DIFFICULTIES = {
@@ -113,14 +112,13 @@ class Game
 
   def win
     console.output(:win)
-    save_score if console.dichotomy_question?(:save_score)
+    Loader.save_score(score_data) if console.dichotomy_question?(:save_score)
     console.dichotomy_question?(:new_game) ? Game.new : console.output(:goodbye)
   end
 
-  def save_score
+  def score_data
     name = console.ask(:username)
-    score_data = { name: name, difficulty: @difficulty_name, attempts: attempts, hints: hints.size }
-    console.save_score(score_data)
+    { name: name, difficulty: @difficulty_name, attempts: attempts, hints: hints.size }
   end
 
   def lose
