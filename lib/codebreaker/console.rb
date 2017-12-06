@@ -3,7 +3,7 @@
 class Console
   attr_reader :game, :difficulty_name
 
-  def initialize
+  def welcome
     output(:welcome)
     welcome_instructions
   end
@@ -83,8 +83,8 @@ class Console
     ask("#{phrases[:round_question]}#{attempts}")
   end
 
-  def loose(secret_code)
-    output(phrases[:loose] << secret_code.join)
+  def lose(secret_code)
+    output(phrases[:lose] << secret_code.join)
   end
 
   def win
@@ -94,7 +94,7 @@ class Console
   end
 
   def lose
-    loose(game.secret_code)
+    lo3se(game.secret_code)
     dichotomy_question?(:new_game) ? new_game : output(:goodbye)
   end
 

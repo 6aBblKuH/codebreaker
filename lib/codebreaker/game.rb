@@ -8,6 +8,7 @@ class Game
   }.freeze
 
   attr_reader :attempts, :hints, :secret_code
+  attr_accessor :user_code
 
   def initialize(difficulty)
     @secret_code = Array.new(4) { rand(1..6) }
@@ -38,15 +39,15 @@ class Game
 
   def check_numbers_for_correct_position
     secret_code.map.with_index do |element, index|
-      next element unless element == @user_code[index]
-      @user_code[index] = nil
+      next element unless element == user_code[index]
+      user_code[index] = nil
     end
   end
 
   def handle_numbers
     uncatched_numbers = check_numbers_for_correct_position
     @round_result = '+' * uncatched_numbers.select(&:nil?).size
-    @user_code.compact.map do |number|
+    user_code.compact.map do |number|
       next unless uncatched_numbers.compact.include?(number)
       @round_result += '-'
       uncatched_numbers[uncatched_numbers.index(number)] = nil
