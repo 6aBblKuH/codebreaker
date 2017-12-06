@@ -213,6 +213,41 @@ RSpec.describe Game do
   end
 end
 
-# RSpec.describe Console do
+RSpec.describe Console do
+  context '#welcome' do
+    it "calls output and welcome_instructions methods" do
+      allow(subject).to receive(:output)
+      allow(subject).to receive(:welcome_instructions)
+      subject.welcome
+    end
+  end
 
-# end
+  context '#new_game' do
+    before do
+      allow(subject).to receive(:rules)
+      allow(subject).to receive(:handle_difficulty)
+      allow(subject).to receive(:game_round)
+      subject.instance_variable_set(:@difficulty_name, :easy)
+    end
+
+    it "calls rules, handle_difficulty and game_round methods" do
+      expect(subject).to receive(:rules)
+      expect(subject).to receive(:handle_difficulty)
+      expect(subject).to receive(:game_round)
+      subject.send(:new_game)
+    end
+
+    it "creates instance variable with Game object" do
+      expect { subject.send(:new_game) }.to change { subject.game }.to(Game)
+    end
+
+  end
+
+
+
+
+
+
+
+
+end
