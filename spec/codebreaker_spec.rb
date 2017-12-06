@@ -3,19 +3,49 @@
 RSpec.describe Game do
   subject { Game.new(:easy) }
 
-  context '#secret_code' do
-    let(:secret_code) { subject.secret_code }
+  context 'instance variables after creating Game object' do
+    context 'secret_code' do
+      let(:secret_code) { subject.secret_code }
 
-    it 'return secret code' do
-      expect(secret_code).to be_kind_of(Array)
+      it 'return secret code' do
+        expect(secret_code).to be_kind_of(Array)
+      end
+
+      it 'has 4 digit' do
+        expect(secret_code.size).to eq(4)
+      end
+
+      it 'has only digits between 1 and 6' do
+        expect(secret_code.join).to match(/^[1-6]{4}$/)
+      end
     end
 
-    it 'has 4 digit' do
-      expect(secret_code.size).to eq(4)
+    context 'attempts' do
+      it "sets easy lvl for attempts" do
+        expect(subject.attempts).to eq(Game::DIFFICULTIES.dig(:easy, :attempts))
+      end
+
+      it "sets medium lvl for attempts" do
+        expect(Game.new(:medium).attempts).to eq(Game::DIFFICULTIES.dig(:medium, :attempts))
+      end
+
+      it "sets hard lvl for attempts" do
+        expect(Game.new(:hard).attempts).to eq(Game::DIFFICULTIES.dig(:hard, :attempts))
+      end
     end
 
-    it 'has only digits between 1 and 6' do
-      expect(secret_code.join).to match(/^[1-6]{4}$/)
+    context 'hints' do
+      it "sets easy lvl for hints" do
+        expect(subject.hints.size).to eq(Game::DIFFICULTIES.dig(:easy, :hints))
+      end
+
+      it "sets medium lvl for hints" do
+        expect(Game.new(:medium).hints.size).to eq(Game::DIFFICULTIES.dig(:medium, :hints))
+      end
+
+      it "sets hard lvl for hints" do
+        expect(Game.new(:hard).hints.size).to eq(Game::DIFFICULTIES.dig(:hard, :hints))
+      end
     end
   end
 

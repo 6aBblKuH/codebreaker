@@ -94,7 +94,7 @@ class Console
   end
 
   def lose
-    lo3se(game.secret_code)
+    lose(game.secret_code)
     dichotomy_question?(:new_game) ? new_game : output(:goodbye)
   end
 
