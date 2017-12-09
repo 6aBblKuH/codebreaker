@@ -12,7 +12,7 @@
 :welcome_instruction: "Type 'game' for starting new game.\nType 'stats' for showing statistics\nType 'exit' for exit"
 :rules: "You have to guess 4-digit number where each digit placed between 1 and 6.\nThe code-maker then marks the guess with up to four + and - signs.\nA + indicates an exact match: one of the numbers in the guess is the same.\nA - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position."
 :win: 'Congrat. U did it'
-:loose: 'What do we say God of Games? Not today. Secret code was - '
+:lose: 'What do we say God of Games? Not today. Secret code was - '
 :no_hint: 'Hints are over'
 :round_question: "Put the number. Attempts remain - "
 :invalid_number: 'Put 4-digital number'

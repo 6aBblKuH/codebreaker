@@ -8,5 +8,5 @@ require_relative 'codebreaker/loader'
 require_relative 'codebreaker/game'
 
 module Codebreaker
-  Game.new
+  Codebreaker::Console.new
 end
