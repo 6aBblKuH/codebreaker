@@ -75,7 +75,21 @@ RSpec.describe Codebreaker::Console do
     end
   end
 
-  context '' do
+  context '#dichotomy_question?' do
+    it 'calls ask method' do
+      allow(subject).to receive(:ask).and_return('test')
+      expect(subject).to receive(:ask)
+      subject.send(:dichotomy_question?, 'test')
+    end
 
+    it 'returns false when user dissagree' do
+      allow(subject).to receive(:ask).and_return('no')
+      expect(subject.send(:dichotomy_question?, 'test')).to be_falsey
+    end
+
+    it 'returns true when user agree' do
+      allow(subject).to receive(:ask).and_return('yes')
+      expect(subject.send(:dichotomy_question?, 'test')).to be_truthy
+    end
   end
 end
