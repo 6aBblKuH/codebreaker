@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Codebreaker::Game do
-  subject { Codebreaker::Game.new(:easy) }
 
   context 'instance variables after creating Game object' do
     context 'secret_code' do
