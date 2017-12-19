@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Loader
+class Codebreaker::Storage
   PATH = 'lib/codebreaker/src/'
 
   class << self

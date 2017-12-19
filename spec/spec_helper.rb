@@ -9,6 +9,7 @@ RSpec.configure do |config|
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
+  RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

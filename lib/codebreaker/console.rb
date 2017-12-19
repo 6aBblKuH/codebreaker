@@ -85,13 +85,9 @@ module Codebreaker
       ask("#{phrases[:round_question]}#{attempts}")
     end
 
-    def lose(secret_code)
-
-    end
-
     def win
       output(:win)
-      Loader.save_score(score_data) if dichotomy_question?(:save_score)
+      Codebreaker::Storage.save_score(score_data) if dichotomy_question?(:save_score)
       dichotomy_question?(:new_game) ? new_game : output(:goodbye)
     end
 
@@ -107,11 +103,11 @@ module Codebreaker
     end
 
     def phrases
-      @phrases ||= Loader.load_file('phrases')
+      @phrases ||= Codebreaker::Storage.load_file('phrases')
     end
 
     def statistics
-      @statistics ||= Loader.load_file('statistics')
+      @statistics ||= Codebreaker::Storage.load_file('statistics')
     end
 
     def handle_statistics_for_output
