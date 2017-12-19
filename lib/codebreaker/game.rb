@@ -1,5 +1,5 @@
   # frozen_string_literal: true
-  
+
 module Codebreaker
 
   class Game
@@ -12,7 +12,7 @@ module Codebreaker
     attr_reader :attempts, :hints, :secret_code
     attr_accessor :user_code
 
-    def initialize(difficulty)
+    def initialize(difficulty = :easy)
       @secret_code = Array.new(4) { rand(1..6) }
       @attempts = DIFFICULTIES.dig(difficulty, :attempts)
       @hints = secret_code.shuffle.take(DIFFICULTIES.dig(difficulty, :hints))

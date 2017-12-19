@@ -1,5 +1,3 @@
-require 'codebreaker'
-
 RSpec.describe Codebreaker::Console do
   before do
     allow(subject).to receive(:output)
@@ -7,7 +5,6 @@ RSpec.describe Codebreaker::Console do
 
   context '#welcome' do
     it 'calls output and welcome_instructions methods' do
-      allow(subject).to receive(:welcome_instructions)
       expect(subject).to receive(:output)
       expect(subject).to receive(:welcome_instructions)
       subject.welcome
@@ -15,21 +12,12 @@ RSpec.describe Codebreaker::Console do
   end
 
   context '#new_game' do
-    before do
-      allow(subject).to receive(:rules)
-      allow(subject).to receive(:handle_difficulty)
-      allow(subject).to receive(:game_round)
-      subject.instance_variable_set(:@difficulty_name, :easy)
-    end
+    before { subject.instance_variable_set(:@difficulty_name, :easy) }
 
-    it 'calls rules, handle_difficulty and game_round methods' do
+    it 'creates game instance and calls correct methods' do
       expect(subject).to receive(:rules)
       expect(subject).to receive(:handle_difficulty)
       expect(subject).to receive(:game_round)
-      subject.send(:new_game)
-    end
-
-    it 'creates instance variable with Game object' do
       expect { subject.send(:new_game) }.to change { subject.game }.to(Codebreaker::Game)
     end
   end
@@ -46,7 +34,6 @@ RSpec.describe Codebreaker::Console do
     end
 
     it 'calls method for getting hint' do
-      allow(subject.game).to receive(:take_a_hint!)
       expect(subject.game).to receive(:take_a_hint!)
       subject.send(:hint)
     end
@@ -55,13 +42,13 @@ RSpec.describe Codebreaker::Console do
   context '#round_message' do
 
     it 'calls game instance method  handle_guess ' do
-      allow(subject.game).to receive(:valid_answer?).and_return(0)
+      expect(subject.game).to receive(:valid_answer?).and_return(0)
       expect(subject.game).to receive(:handle_guess)
       subject.send(:round_message, '1234')
     end
 
     it 'outputs error message' do
-      allow(subject.game).to receive(:valid_answer?)
+      expect(subject.game).to receive(:valid_answer?)
       expect(subject).to receive(:output).with(:invalid_number)
       subject.send(:round_message, '1234')
     end
@@ -77,18 +64,17 @@ RSpec.describe Codebreaker::Console do
 
   context '#dichotomy_question?' do
     it 'calls ask method' do
-      allow(subject).to receive(:ask).and_return('test')
-      expect(subject).to receive(:ask)
+      expect(subject).to receive(:ask).and_return('test')
       subject.send(:dichotomy_question?, 'test')
     end
 
     it 'returns false when user dissagree' do
-      allow(subject).to receive(:ask).and_return('no')
+      expect(subject).to receive(:ask).and_return('no')
       expect(subject.send(:dichotomy_question?, 'test')).to be_falsey
     end
 
     it 'returns true when user agree' do
-      allow(subject).to receive(:ask).and_return('yes')
+      expect(subject).to receive(:ask).and_return('yes')
       expect(subject.send(:dichotomy_question?, 'test')).to be_truthy
     end
   end

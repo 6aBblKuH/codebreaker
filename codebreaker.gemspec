@@ -6,20 +6,19 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'codebreaker/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'codebreaker'
+  spec.name          = 'codebreaker_Bavykin'
   spec.version       = Codebreaker::VERSION
   spec.authors       = ['Dmitriy Bavykin']
-  spec.email         = ['1996@3g.ua']
-
+  spec.email         = ['6aBblKuH@gmail.com']
   spec.summary       = 'My first summary'
   spec.description   = 'My first codebreaker'
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/6aBblKuH/codebreaker"
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata['allowed_push_host'] = "https://rubygems.org"
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \
       'public gem pushes.'
